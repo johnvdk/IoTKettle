@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MorningMadness</string>
+    <string name="stop_alarm">Stop Alarm</string>
+    <string name="start_alarm">Start Alarm</string>
+    <string name="edit_text_hours">Hours</string>
+    <string name="edit_text_mins">Minutes</string>
+    <string name="am">AM</string>
+    <string name="pm">PM</string>
+    <string name="label">Please input the desired time for the alarm to go off: </string>
+    <string name="BT_button">Bluetooth Devices</string>
+    <string name="title_activity_device_list">Main2Activity</string>
+</resources>

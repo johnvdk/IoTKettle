@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:padding="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".STM32control">
+
+    <Button
+        android:id="@+id/on_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kettle ON"
+        android:layout_marginTop="40dp"/>
+
+    <Button
+        android:id="@+id/off_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kettle OFF"
+        android:layout_marginTop="40dp"/>
+
+
+    <Button
+        android:id="@+id/disconnect_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Disconnect" />
+
+    <TextView
+        android:id="@+id/brightness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="200dp"
+        android:text="Brightness"
+        android:textColor="@android:color/black" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
