@@ -22,10 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnPaired;
     private ListView deviceList;
     private Set <BluetoothDevice> pairedDevices;
-    public static String EXTRA_ADDRESS = "device_address";
-
-    //Alarm Request Code
-    private static final int ALARM_REQUEST_CODE = 133;
+    public static String SELECT_ADDRESS = "device_address";
 
 
     @Override
@@ -48,12 +45,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void BTsetUp() {
         myBT = BluetoothAdapter.getDefaultAdapter();
+        //Checks if there is bluetooth capabilities for the device
         if (myBT == null){
             Toast.makeText(this, "No Bluetooth capability", Toast.LENGTH_SHORT).show();
-            //finish();
         }
 
         else {
+            //If Bluetooth is not turned on, prompts the user to turn it on
             if (myBT.isEnabled()){ }
             else {
                 Intent turnBTon = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
@@ -62,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //Creates a list of Paired devices and puts them into a list view
     private void getPairedDevices() {
         pairedDevices = myBT.getBondedDevices();
         ArrayList tempList = new ArrayList();
@@ -80,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         deviceList.setOnItemClickListener(myListClickListener);
     }
 
+    //Creates each item in the list view as a button, selected device is carried over to the next activity
     private AdapterView.OnItemClickListener myListClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
             Intent i = new Intent(MainActivity.this, STM32control.class);
 
-            i.putExtra(EXTRA_ADDRESS, address);
-            i.putExtra("init", true);
+            i.putExtra(SELECT_ADDRESS, address);//Pass the selected bluetooth address
+            i.putExtra("init", true);//flag to check if the STM32control activity is instantiated by MainActivity
             startActivity(i);
         }
     };

@@ -39,7 +39,7 @@ public class STM32control extends AppCompatActivity {
     BluetoothSocket btSocket = null;
     private boolean isBtConnected = false;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    public static String EXTRA_ADDRESS = "device_address";
+    public static String SELECT_ADDRESS = "device_address";
     private boolean originMain = false;
 
 
@@ -48,37 +48,40 @@ public class STM32control extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stm32control);
 
-        new ConnectBT().execute();
+        new ConnectBT().execute();//Sets up bluetooth connectivity
 
-        address = getIntent().getStringExtra(MainActivity.EXTRA_ADDRESS);
+        address = getIntent().getStringExtra(MainActivity.SELECT_ADDRESS);//get the device address passed from MainActivity
         if(getIntent().getBooleanExtra("init", true)){
-            originMain = true;
+            originMain = true;//flag for ensuring kettle is off first time activity called
         }
 
         if(getIntent().getBooleanExtra("lock", false)){
             originMain = false;
+
+            //Turns screen on if in sleep state
             Window win = this.getWindow();
             win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
             win.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
-            address = getIntent().getStringExtra(MyReceiver.EXTRA_ADDRESS);
-            Log.d("Trying this", address);
+
+            address = getIntent().getStringExtra(MyReceiver.SELECT_ADDRESS);//get the device address passed from MyReceiver
             msg("ALARM!!! Turning on Kettle Now");
-            this.startService(new Intent(this, AlarmSoundService.class));
+            this.startService(new Intent(this, AlarmSoundService.class));//Turn on a sound alarm
         }
 
 
 
-        //Find id of all radio buttons
+        //Grab ID of AM and PM Radio buttons
         AMRadioButton = (RadioButton) findViewById(R.id.AM_radio_button);
         PMRadioButton = (RadioButton) findViewById(R.id.PM_radio_button);
 
 
-        /* Retrieve a PendingIntent that will perform a broadcast */
+        //Retrieve a PendingIntent that will perform a broadcast
         Intent alarmIntent = new Intent(STM32control.this, MyReceiver.class);
-        alarmIntent.putExtra(EXTRA_ADDRESS, address);
+        alarmIntent.putExtra(SELECT_ADDRESS, address);    //Pass the bluetooth device address
+
         pendingIntent = PendingIntent.getBroadcast(STM32control.this, ALARM_REQUEST_CODE, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        //Find id of Edit Text
+        //Find id of Edit Text boxes
         final EditText editTextMins = (EditText) findViewById(R.id.input_interval_time_mins);
         final EditText editTextHrs = (EditText) findViewById(R.id.input_interval_time_hours);
 
@@ -114,6 +117,8 @@ public class STM32control extends AppCompatActivity {
         btnOff = (Button) findViewById(R.id.off_button);
         btnDis = (Button) findViewById(R.id.disconnect_button);
 
+
+        //By-pass alarm and turn on kettle via button
         btnOn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,6 +126,7 @@ public class STM32control extends AppCompatActivity {
             }
         });
 
+        //By-pass kettle and turn on kettle via button
         btnOff.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +134,7 @@ public class STM32control extends AppCompatActivity {
             }
         });
 
+        //Disconnect the bluetooth
         btnDis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,21 +144,26 @@ public class STM32control extends AppCompatActivity {
 
 
     }
+
+    //Turns on the kettle by sending a command over the bluetooth connection
     public void turnOnKettle() {
         if (btSocket!= null){
             try{
-                btSocket.getOutputStream().write("TO".toString().getBytes());
+                btSocket.getOutputStream().write("TO".toString().getBytes()); //send Turn On kettle command over bluetooth
             } catch (IOException e){msg("Error turning kettle on"); }
         }
     }
 
+    //Turns off the kettle by sending a command over the bluetooth connection
     public void turnOffKettle() {
         if (btSocket!= null){
             try{
-                btSocket.getOutputStream().write("TF".toString().getBytes());
+                btSocket.getOutputStream().write("TF".toString().getBytes()); //send Turn Off kettle command over bluetooth
             } catch (IOException e){msg("Error turning kettle off"); }
         }
     }
+
+    //Disconnects the current bluetooth connection
     public void Disconnect(){
         if (btSocket !=null){
             try{
@@ -160,7 +172,7 @@ public class STM32control extends AppCompatActivity {
         }
     }
 
-
+    //Main code structure obtained from instructable written by Deyson on how to connect bluetooth
     private class ConnectBT extends AsyncTask<Void, Void, Void>  // UI thread
     {
         private boolean ConnectSuccess = true; //if it's here, it's almost connected
@@ -201,16 +213,19 @@ public class STM32control extends AppCompatActivity {
                 msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
                 finish();
             }
+
             else
             {
                 msg("Connected.");
                 isBtConnected = true;
             }
             progress.dismiss();
+
+            //If STM32control called by MainActivity first time, turn the kettle off
             if(originMain){
                 turnOffKettle();
-                Disconnect();
             }
+            //If STM32control called by MyReceiver (Alarm) turn the kettle on
             else{
                 turnOnKettle();
             }
@@ -218,44 +233,60 @@ public class STM32control extends AppCompatActivity {
 
     }
 
-    private void msg(String s){
-        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+    //Function to call a toast
+    private void msg(String str){
+        Toast.makeText(getApplicationContext(), str, Toast.LENGTH_LONG).show();
     }
 
-    //Trigger alarm manager with entered time interval
+    //Trigger alarm with user-inputted time
     public void triggerAlarmManager(int hr, int min) {
-        if (hr < 0 || hr > 12){
+        if (hr < 0 || hr > 12){ //Hours must confine to the 12 hour clock
             msg("Error: Please enter a number of hours between 0 and 12");
         }
-        else if (min < 0 || min > 59){
+        else if (min < 0 || min > 59){ //Minutes must confine to 12 hour clock
             msg("Error: Please enter a number of minutes between 0 and 59");
         }
         else{
 
+            //Establish AM or PM
             String AMorPM = " AM";
             int timeHr = hr;
             if (PMRadioButton.isChecked()){
                 hr += 12;
                 AMorPM = " PM";
             }
+
             // get a Calendar object with current time
             Calendar cal = Calendar.getInstance();
+
+            String whatDay = " today";
+
+            //If alarm set for a time earlier than current time, assume it's the next day
             if((cal.get(Calendar.HOUR) >= hr) && (cal.get(Calendar.MINUTE) >= min)){
                 int day = cal.get(Calendar.DAY_OF_YEAR);
                 cal.set(Calendar.DAY_OF_YEAR, day + 1);
+                whatDay = " tomorrow";
+
             }
+            //Set the desired time for the alarm from the user input
             cal.set(Calendar.HOUR_OF_DAY, hr);
             cal.set(Calendar.MINUTE, min);
 
-            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);//get instance of alarm manager
-            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);//set alarm manager with entered timer by converting into milliseconds
+            //Disconnect current bluetooth connection so that the alarm can be called
+            Disconnect();
 
+            AlarmManager manager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);//Get instance of alarm manager
+            manager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);//Set the alarm by converting the desired time into milliseconds
+
+
+            //Notify the user what time the alarm will be set
             if (min < 10){
-                msg("Alarm Set for " + timeHr + ":0" + min + AMorPM);
+                msg("Alarm Set for " + timeHr + ":0" + min + AMorPM + whatDay);
             }
             else {
-                msg("Alarm Set for " + timeHr + ":0" + min + AMorPM);
+                msg("Alarm Set for " + timeHr + ":0" + min + AMorPM + whatDay);
             }
+
         }
     }
 
