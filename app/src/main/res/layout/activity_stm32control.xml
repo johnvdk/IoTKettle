@@ -8,6 +8,89 @@
     android:layout_height="match_parent"
     tools:context=".STM32control">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label"
+        android:textColor="@android:color/black"
+        android:textSize="13sp" />
+
+    <RadioGroup
+        android:id="@+id/time_type_selection_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="5dp">
+
+        <RadioButton
+            android:id="@+id/AM_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:gravity="center_vertical"
+            android:text="@string/am"
+            android:textColor="@android:color/black"/>
+
+        <RadioButton
+            android:id="@+id/PM_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/pm"
+            android:textColor="@android:color/black" />
+    </RadioGroup>
+
+
+    <LinearLayout android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <EditText
+            android:id="@+id/input_interval_time_hours"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/edit_text_hours"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="14sp"
+            android:inputType="number"/>
+        <EditText
+            android:id="@+id/input_interval_time_mins"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="@string/edit_text_mins"
+            android:inputType="number"
+            android:padding="10dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/darker_gray"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/start_alarm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/start_alarm"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
+
+    <Button
+        android:id="@+id/stop_alarm_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/colorPrimary"
+        android:text="@string/stop_alarm"
+        android:textColor="@android:color/white"
+        android:textSize="14sp" />
+
     <Button
         android:id="@+id/on_button"
         android:layout_width="match_parent"
@@ -29,17 +112,4 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:text="Disconnect" />
-
-    <TextView
-        android:id="@+id/brightness"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:text="Brightness"
-        android:textColor="@android:color/black" />
-
-    <SeekBar
-        android:id="@+id/seekBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
 </LinearLayout>
