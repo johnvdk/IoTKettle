@@ -262,9 +262,9 @@ public class STM32control extends AppCompatActivity {
             String whatDay = " today";
 
             //If alarm set for a time earlier than current time, assume it's the next day
-            if((cal.get(Calendar.HOUR) >= hr) && (cal.get(Calendar.MINUTE) >= min)){
+            if((cal.get(Calendar.HOUR) >= timeHr) && (cal.get(Calendar.MINUTE) >= min)){
                 int day = cal.get(Calendar.DAY_OF_YEAR);
-                cal.set(Calendar.DAY_OF_YEAR, day + 1);
+                cal.set(Calendar.DAY_OF_YEAR, (day + 1));
                 whatDay = " tomorrow";
 
             }
@@ -284,7 +284,7 @@ public class STM32control extends AppCompatActivity {
                 msg("Alarm Set for " + timeHr + ":0" + min + AMorPM + whatDay);
             }
             else {
-                msg("Alarm Set for " + timeHr + ":0" + min + AMorPM + whatDay);
+                msg("Alarm Set for " + timeHr + ":" + min + AMorPM + whatDay);
             }
 
         }
