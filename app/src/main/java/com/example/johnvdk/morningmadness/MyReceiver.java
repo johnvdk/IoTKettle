@@ -16,6 +16,7 @@ public class MyReceiver extends BroadcastReceiver {
 
         //Create new intent to call STM32control again with the alarm
         Intent in = new Intent(context, STM32control.class);
+        in.putExtra("init", false);
         in.putExtra("lock", true); //alarm flag
         in.putExtra("device_address", address);//Pass the bluetooth device address
         in.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//Create a new activity with the intent

@@ -31,7 +31,8 @@
         <!-- Declare  Alarm Sound Service here -->
         <service android:name=".AlarmSoundService" />
 
-        <activity android:name=".STM32control"></activity>
+        <activity android:name=".STM32control" />
+        <activity android:name=".BluetoothOnlyControl"></activity>
     </application>
 
 </manifest>

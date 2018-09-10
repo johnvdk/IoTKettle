@@ -4,6 +4,9 @@
     <string name="start_alarm">Start Alarm</string>
     <string name="edit_text_hours">Hours</string>
     <string name="edit_text_mins">Minutes</string>
+    <string name="alarmSelect">Alarm control</string>
+    <string name="bluetoothSelect">Bluetooth control</string>
+    <string name="app_title">MorningMadness Kettle Controller</string>
     <string name="am">AM</string>
     <string name="pm">PM</string>
     <string name="label">Please input the desired time for the alarm to go off: </string>

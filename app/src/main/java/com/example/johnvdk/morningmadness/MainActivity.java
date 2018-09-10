@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     private ListView deviceList;
     private Set <BluetoothDevice> pairedDevices;
     public static String SELECT_ADDRESS = "device_address";
+
+    private RadioButton BluetoothButton, AlarmButton;
 
 
     @Override
@@ -40,6 +43,10 @@ public class MainActivity extends AppCompatActivity {
                 getPairedDevices();
             }
         });
+
+        //Grab ID of AM and PM Radio buttons
+        BluetoothButton = (RadioButton) findViewById(R.id.Bluetooth_radio_button);
+        AlarmButton = (RadioButton) findViewById(R.id.Alarm_radio_button);
 
     }
 
@@ -86,11 +93,21 @@ public class MainActivity extends AppCompatActivity {
             String info = ((TextView) view).getText().toString();
             String address =info.substring(info.length() - 17);
 
-            Intent i = new Intent(MainActivity.this, STM32control.class);
+            if (AlarmButton.isChecked()){
+                Intent i = new Intent(MainActivity.this, STM32control.class);
 
-            i.putExtra(SELECT_ADDRESS, address);//Pass the selected bluetooth address
-            i.putExtra("init", true);//flag to check if the STM32control activity is instantiated by MainActivity
-            startActivity(i);
+                i.putExtra(SELECT_ADDRESS, address);//Pass the selected bluetooth address
+                i.putExtra("init", true);//flag to check if the STM32control activity is instantiated by MainActivity
+                startActivity(i);
+
+            }
+            else if (BluetoothButton.isChecked()){
+                Intent i = new Intent(MainActivity.this, BluetoothOnlyControl.class);
+
+                i.putExtra(SELECT_ADDRESS, address);//Pass the selected bluetooth address
+                i.putExtra("init", true);//flag to check if the STM32control activity is instantiated by MainActivity
+                startActivity(i);
+            }
         }
     };
 }

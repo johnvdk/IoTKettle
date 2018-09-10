@@ -10,9 +10,46 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/app_title"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        android:textSize="25sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/BT_label"
         android:textColor="@android:color/black"
+        android:layout_marginTop="20dp"
         android:textSize="13sp" />
+
+    <RadioGroup
+        android:id="@+id/time_type_selection_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <RadioButton
+            android:id="@+id/Alarm_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:gravity="center_vertical"
+            android:text="@string/alarmSelect"
+            android:textColor="@android:color/black"/>
+
+        <RadioButton
+            android:id="@+id/Bluetooth_radio_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="@string/bluetoothSelect"
+            android:textColor="@android:color/black" />
+    </RadioGroup>
 
     <Button
         android:id="@+id/BT_button"

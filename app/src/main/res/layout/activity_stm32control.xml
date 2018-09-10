@@ -11,8 +11,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/app_title"
+        android:textColor="@android:color/black"
+        android:textStyle="bold|italic"
+        android:textSize="25sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/label"
         android:textColor="@android:color/black"
+        android:layout_marginTop="20dp"
         android:textSize="13sp" />
 
     <RadioGroup
@@ -21,7 +30,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="5dp">
+        android:padding="10dp">
 
         <RadioButton
             android:id="@+id/AM_radio_button"
@@ -56,6 +65,7 @@
             android:textColor="@android:color/black"
             android:textColorHint="@android:color/darker_gray"
             android:textSize="14sp"
+            android:padding="20dp"
             android:inputType="number"/>
         <EditText
             android:id="@+id/input_interval_time_mins"
@@ -64,7 +74,7 @@
             android:layout_weight="1"
             android:hint="@string/edit_text_mins"
             android:inputType="number"
-            android:padding="10dp"
+            android:padding="20dp"
             android:textColor="@android:color/black"
             android:textColorHint="@android:color/darker_gray"
             android:textSize="14sp" />
@@ -74,7 +84,7 @@
         android:id="@+id/start_alarm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
         android:text="@string/start_alarm"
         android:textColor="@android:color/white"
@@ -85,31 +95,9 @@
         android:id="@+id/stop_alarm_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@color/colorPrimary"
         android:text="@string/stop_alarm"
         android:textColor="@android:color/white"
         android:textSize="14sp" />
-
-    <Button
-        android:id="@+id/on_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Kettle ON"
-        android:layout_marginTop="40dp"/>
-
-    <Button
-        android:id="@+id/off_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Kettle OFF"
-        android:layout_marginTop="40dp"/>
-
-
-    <Button
-        android:id="@+id/disconnect_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:text="Disconnect" />
 </LinearLayout>
