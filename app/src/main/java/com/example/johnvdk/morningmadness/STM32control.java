@@ -31,24 +31,22 @@ public class STM32control extends AppCompatActivity {
 
     private RadioButton AMRadioButton, PMRadioButton;
     private static final int ALARM_REQUEST_CODE = 133;
-
-    String address = null;
     private ProgressDialog progress;
     public static String SELECT_ADDRESS = "device_address";
     private boolean originMain = true;
 
+    BluetoothControls Bluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stm32control);
-
-        address = getAddress();
-        final BluetoothControls Bluetooth = new BluetoothControls(address);
+        String address = getAddress();
+        Bluetooth = new BluetoothControls(address);
 
         if(!originMain){
-            //Turns screen on if in sleep state
             new ConnectBT().execute(Bluetooth);
+            //Turns screen on if in sleep state
             Window win = this.getWindow();
             win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED);
             win.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
@@ -103,6 +101,16 @@ public class STM32control extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onDestroy(){
+        if(Bluetooth.connectStatus()){
+            Bluetooth.turnOffKettle();
+            Bluetooth.Disconnect();
+        }
+        finish();
+        super.onDestroy();
+    }
+
 
 
     //Main code structure obtained from instructable written by Deyson on how to connect bluetooth
@@ -131,18 +139,20 @@ public class STM32control extends AppCompatActivity {
 
             if (!ConnectSuccess)
             {
-                msg("Connection Failed. Is it a SPP Bluetooth? Try again.");
+                Bluetooth.connectSocket();
+                if(!Bluetooth.connectStatus()){
+                    msg("Sorry, connection Failed. Is it a SPP Bluetooth? Try again.");//try again
+                }
             }
 
             else
             {
                 msg("Connected.");
+                if(!originMain){
+                    Bluetooth.turnOnKettle();
+                }
             }
             progress.dismiss();
-
-            if(!originMain){
-                Bluetooth.turnOnKettle();
-            }
         }
 
     }

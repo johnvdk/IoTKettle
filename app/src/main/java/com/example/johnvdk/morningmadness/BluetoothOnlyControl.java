@@ -11,11 +11,13 @@ import android.widget.Toast;
 public class BluetoothOnlyControl extends AppCompatActivity {
 
     Button btnOn, btnOff, btnDis;
-    String address = null;
     private ProgressDialog progress;
+    BluetoothControls Bluetooth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        String address = getIntent().getStringExtra(MainActivity.SELECT_ADDRESS);
+        Bluetooth = new BluetoothControls(address);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth_only_control);
 
@@ -23,8 +25,6 @@ public class BluetoothOnlyControl extends AppCompatActivity {
         btnOff = (Button) findViewById(R.id.off_button);
         btnDis = (Button) findViewById(R.id.disconnect_button);
         address = getIntent().getStringExtra(MainActivity.SELECT_ADDRESS);
-
-        final BluetoothControls Bluetooth = new BluetoothControls(address);
         new ConnectBT().execute(Bluetooth);
 
         //By-pass alarm and turn on kettle via button
@@ -47,9 +47,27 @@ public class BluetoothOnlyControl extends AppCompatActivity {
         btnDis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bluetooth.turnOffKettle();
                 Bluetooth.Disconnect();
+                finish();
             }
         });
+    }
+    @Override
+    public void onBackPressed(){
+        Bluetooth.turnOffKettle();
+        Bluetooth.Disconnect();
+        finish();
+    }
+
+    @Override
+    protected void onDestroy(){
+        if(Bluetooth.connectStatus()){
+            Bluetooth.turnOffKettle();
+            Bluetooth.Disconnect();
+        }
+        finish();
+        super.onDestroy();
     }
 
     private class ConnectBT extends AsyncTask<BluetoothControls, Void, Void>  // UI thread

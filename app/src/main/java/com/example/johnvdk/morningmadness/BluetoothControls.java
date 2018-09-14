@@ -14,7 +14,7 @@ public class BluetoothControls {
     BluetoothAdapter myBluetooth = null;
     BluetoothSocket btSocket = null;
     private boolean isBtConnected = false;
-    private boolean ConnectSuccess = true;
+    private boolean ConnectSuccess = false;
     static final UUID myUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
 
     BluetoothControls(String address){
@@ -31,6 +31,7 @@ public class BluetoothControls {
                 btSocket = dispositivo.createInsecureRfcommSocketToServiceRecord(myUUID);//create a RFCOMM (SPP) connection
                 BluetoothAdapter.getDefaultAdapter().cancelDiscovery();
                 btSocket.connect();//start connection
+                ConnectSuccess = true;
             }
         }
         catch (IOException e)
